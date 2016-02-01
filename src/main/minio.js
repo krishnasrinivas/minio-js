@@ -98,9 +98,11 @@ export default class Client {
     var libraryAgent = `Minio ${libraryComments} minio-js/${Package.version}`
     // User agent block ends.
 
-    // enable connection reuse and pooling
-    transport.globalAgent.keepAlive = true
-
+    if (typeof window === 'undefined') {
+      // Enable connection reuse and pooling in nodejs. Not supported in browsers
+      // as http-browserify does not support it
+      transport.globalAgent.keepAlive = true
+    }
     this.host = host
     this.port = port
     this.protocol = protocol
